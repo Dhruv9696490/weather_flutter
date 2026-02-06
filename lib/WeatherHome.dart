@@ -14,8 +14,8 @@ class _WeatherHomeState extends State<WeatherHome> {
   final TextEditingController _controller = TextEditingController();
   @override
   void dispose(){
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
   void _sendCityName(){
     if(_controller.text.isNotEmpty){
@@ -27,7 +27,7 @@ class _WeatherHomeState extends State<WeatherHome> {
     }
   }
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     final viewModel = Provider.of<WeatherViewModel>(context);
     return Scaffold(
       appBar: AppBar(
@@ -35,69 +35,71 @@ class _WeatherHomeState extends State<WeatherHome> {
         centerTitle: true,
       ),
       body: SafeArea(child:
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    onSubmitted: (city){
-                      if(city.isNotEmpty){
-                        viewModel.getAllData(city);
-                        _controller.clear();
-                      }else{
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Enter the city name")));
-                      }
-                    },
-                    decoration: InputDecoration(
-                      hint: Text("Enter the city",style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold
-                      ),),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          width: 3.5,
+      SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      onSubmitted: (city){
+                        if(city.isNotEmpty){
+                          viewModel.getAllData(city);
+                          _controller.clear();
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Enter the city name")));
+                        }
+                      },
+                      decoration: InputDecoration(
+                        hint: Text("Enter the city",style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold
+                        ),),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 3.5,
+                          ),
+                          borderRadius: BorderRadius.circular(16)
                         ),
-                        borderRadius: BorderRadius.circular(16)
                       ),
-                    ),
 
-                  ),
-                ),
-              SizedBox(width: 8,),
-                SizedBox(
-                  height: 55,
-                  child: OutlinedButton(onPressed: (){
-                    _sendCityName();
-                  },
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
                     ),
-                              child: Text("Search",style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey
-                              ),),),
-                )
-              ],
-            ),
-            SizedBox(height: 8,),
-            Consumer<WeatherViewModel>(builder: (context,viewModel,_){
-              if(viewModel.loading){
-                 return const CircularProgressIndicator();
-              }else if(viewModel.error.isNotEmpty){
-                return  Text(viewModel.error);
-              }else if(viewModel.weatherData.location!=null){
-                return ElevatedBox(data:  viewModel.weatherData);
-              }else{
-                return Text("Enter city name");
-              }
-            })
-          ],
+                  ),
+                SizedBox(width: 8,),
+                  SizedBox(
+                    height: 55,
+                    child: OutlinedButton(onPressed: (){
+                      _sendCityName();
+                    },
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
+                      ),
+                                child: Text("Search",style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey
+                                ),),),
+                  )
+                ],
+              ),
+              SizedBox(height: 8,),
+              Consumer<WeatherViewModel>(builder: (context,viewModel,_){
+                if(viewModel.loading){
+                   return const CircularProgressIndicator();
+                }else if(viewModel.error.isNotEmpty){
+                  return  Text(viewModel.error);
+                }else if(viewModel.weatherData.location!=null){
+                  return ElevatedBox(data:  viewModel.weatherData);
+                }else{
+                  return Text("Enter city name");
+                }
+              })
+            ],
+          ),
         ),
       )),
     );

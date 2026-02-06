@@ -1,11 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:weather_flutter/NewsData.dart';
 import 'package:weather_flutter/WeatherApi.dart';
 
 class WeatherViewModel extends ChangeNotifier{
   final WeatherApi _weatherApi = WeatherApi();
-  //i make it final
     WeatherData _weatherData = WeatherData();
   WeatherData get weatherData => _weatherData;
    bool _loading = false;
